@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VoiceKhata</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f4f8f6;
+  --card: #ffffff;
+  --card2: #edf5f1;
+  --border: #e1ebe5;
+  --text: #192b24;
+  --muted: #71847b;
+  --accent: #16835d;
+  --accent-dark: #116747;
+  --accent-soft: #e6f4ed;
+  --green: #16835d;
+  --red: #c64e4e;
+  --amber: #a66b12;
+  --shadow: 0 12px 32px rgba(29, 59, 45, 0.07);
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+  min-height: 100%;
+}
+body {
+  min-height: 100vh;
+  padding-bottom: 112px;
+  position: relative;
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(216, 240, 226, 0.55), transparent 34rem),
+    var(--bg);
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.topbar,
+.main {
+  width: min(100% - 40px, 1060px);
+  margin-inline: auto;
+}
+.topbar {
+  min-height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar h2 {
+  font-size: clamp(20px, 3vw, 25px);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+}
+#addCustomerButton {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--accent);
+  font-size: 25px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 20px rgba(29, 59, 45, 0.10);
+  backdrop-filter: blur(14px);
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+#addCustomerButton:hover {
+  border-color: #d7e8dd;
+  background: var(--card2);
+  color: var(--accent-dark);
+  box-shadow: 0 8px 18px rgba(29, 59, 45, 0.12);
+  transform: translateY(-2px);
+}
+#addCustomerButton:active {
+  border-color: #d2e6da;
+  background: #edf7f1;
+  color: var(--accent-dark);
+  box-shadow: 0 3px 8px rgba(29, 59, 45, 0.08);
+  transform: translateY(0) scale(0.96);
+}
+#addCustomerButton::after {
+  content: "Add Customer";
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  width: max-content;
+  padding: 7px 9px;
+  border-radius: 8px;
+  background: var(--text);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+#addCustomerButton:hover::after,
+#addCustomerButton:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+.avatar {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #41ae7e, #14744f);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(22, 131, 93, 0.2);
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.grid.kpi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: 0 3px 12px rgba(29, 59, 45, 0.035);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: #cfe1d6;
+  box-shadow: var(--shadow);
+}
+.card h3 {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.kpi .val {
+  font-size: clamp(20px, 3vw, 25px);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+}
+.kpi .delta {
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.up {
+  color: var(--green);
+}
+.down {
+  color: var(--red);
+}
+.chart-wrap {
+  position: relative;
+  height: 220px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.table th,
+.table td {
+  padding: 11px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+}
+.table th {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 650;
+  transition: opacity 150ms ease;
+}
+.badge.paid {
+  background: #e5f5ec;
+  color: #17653f;
+}
+.badge.pending {
+  background: #fff3d8;
+  color: #805509;
+}
+.badge.overdue {
+  background: #fde9e7;
+  color: #963c38;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+input,
+select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #fbfdfb;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(22, 131, 93, 0.12);
+}
+button {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: var(--accent);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+button:hover {
+  transform: translateY(-2px);
+  background: var(--accent-dark);
+  box-shadow: 0 7px 16px rgba(22, 131, 93, 0.2);
+}
+button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(22, 131, 93, 0.35);
+  outline-offset: 3px;
+}
+button.secondary {
+  border-color: var(--border);
+  background: var(--card2);
+  color: var(--text);
+}
+button.secondary:hover {
+  border-color: #c5dbce;
+  background: #e1f0e7;
+  box-shadow: 0 6px 14px rgba(29, 59, 45, 0.08);
+}
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
+  animation: fadeIn 300ms ease both;
+}
+.section.active .card {
+  animation: cardIn 400ms ease both;
+}
+.section.active .card:nth-child(2) {
+  animation-delay: 50ms;
+}
+.section.active .card:nth-child(3) {
+  animation-delay: 100ms;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes cardIn {
+  from {
+    opacity: 0.65;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.profile {
+  max-width: 560px;
+  margin-inline: auto;
+  text-align: center;
+}
+.profile .avatarbig {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 14px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #41ae7e, #14744f);
+  color: #fff;
+  font-size: 28px;
+  font-weight: 750;
+}
+.customer-card {
+  max-width: 560px;
+  margin-inline: auto;
+  padding: clamp(20px, 5vw, 32px);
+}
+.customer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.customer-form .heading {
+  margin: 0;
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  text-transform: none;
+}
+.customer-form .form-intro {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.customer-form .input-field {
+  position: relative;
+}
+.customer-form .input-field input {
+  min-height: 54px;
+  padding: 17px 15px 11px;
+  border-color: #d7e3dc;
+  border-radius: 12px;
+  background: #fbfdfb;
+  letter-spacing: 0.01em;
+}
+.customer-form .input-field label {
+  position: absolute;
+  top: 16px;
+  left: 15px;
+  padding: 0 3px;
+  transform-origin: left center;
+  color: var(--muted);
+  font-size: 13px;
+  pointer-events: none;
+  transition: top 180ms ease, color 180ms ease, font-size 180ms ease;
+}
+.customer-form .input-field input:focus ~ label,
+.customer-form .input-field input:not(:placeholder-shown) ~ label {
+  top: -7px;
+  background: var(--card);
+  color: var(--accent-dark);
+  font-size: 11px;
+  font-weight: 650;
+}
+.customer-form .input-field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(22, 131, 93, 0.11);
+}
+.customer-form .field-label {
+  display: block;
+  margin: 0 0 7px 2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+.credit-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.customer-form .credit-option {
+  border-color: var(--border);
+  background: #f7faf8;
+  color: var(--muted);
+}
+.customer-form .credit-option[aria-pressed="true"] {
+  border-color: rgba(22, 131, 93, 0.25);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  box-shadow: inset 0 0 0 1px rgba(22, 131, 93, 0.08);
+}
+.customer-form .credit-option.credit-taken[aria-pressed="true"] {
+  border-color: #f0d2cf;
+  background: #fff0ee;
+  color: #963c38;
+  box-shadow: inset 0 0 0 1px rgba(198, 78, 78, 0.08);
+}
+.customer-form .attach-button {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px dashed #bfd3c6;
+  border-radius: 12px;
+  background: #f8fbf9;
+  color: var(--accent-dark);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+.customer-form .attach-button:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.customer-form .save-customer {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 2px;
+  background: linear-gradient(135deg, #16835d, #116747);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(22, 131, 93, 0.18), inset 0 1px rgba(255, 255, 255, 0.18);
+}
+.customer-form .save-customer:hover {
+  background: linear-gradient(135deg, #147550, #0f5a3e);
+  box-shadow: 0 9px 18px rgba(22, 131, 93, 0.24);
+}
+.credit-overview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.voice-action {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 260px;
+  margin: 12px 0 0;
+}
+.voice-instruction {
+  margin-top: -12px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+}
+.voice-button {
+  width: 112px;
+  height: 112px;
+  min-height: 112px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--accent);
+  font-size: 46px;
+  display: grid;
+  place-items: center;
+}
+.voice-button:hover {
+  background: transparent;
+  transform: scale(1.03);
+}
+.voice-button.listening {
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+.loader-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.loader-block {
+  display: inline-block;
+  width: 8px;
+  height: 10px;
+  margin: 2px;
+  background-color: rgb(53, 143, 246);
+  box-shadow: 0 0 30px rgb(53, 143, 246);
+  animation: loader 5s infinite;
+}
+@keyframes loader {
+  0% { transform: scale(1); box-shadow: 0 0 40px rgb(53, 143, 246); }
+  13% { transform: scale(1, 4); box-shadow: 0 0 60px rgb(53, 143, 246); }
+  26% { transform: scale(1); box-shadow: 0 0 40px rgb(53, 143, 246); }
+}
+.credit-stat {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: 0 3px 12px rgba(29, 59, 45, 0.035);
+}
+.credit-stat .stat-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.credit-stat .stat-value {
+  margin-top: 8px;
+  font-size: clamp(18px, 3vw, 23px);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+}
+.customer-list {
+  display: grid;
+  gap: 10px;
+}
+.customer-row {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--text);
+  text-align: left;
+}
+.customer-row:hover {
+  border-color: #cfe1d6;
+  background: #fbfdfb;
+  box-shadow: 0 6px 16px rgba(29, 59, 45, 0.08);
+}
+.customer-row h3 {
+  margin: 0 0 5px;
+  color: var(--text);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.customer-row .customer-contact,
+.customer-row .customer-date {
+  color: var(--muted);
+  font-size: 12px;
+}
+.customer-row .customer-date {
+  margin-top: 5px;
+}
+.customer-row .customer-balance {
+  flex: 0 0 auto;
+  text-align: right;
+}
+.customer-row .customer-amount {
+  font-size: 14px;
+  font-weight: 750;
+}
+.customer-row .customer-kind {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 10px;
+  font-weight: 650;
+}
+.customer-row .customer-kind.taken {
+  background: #fff0ee;
+  color: #963c38;
+}
+.empty-state {
+  padding: 28px 18px;
+  border: 1px dashed #cbd9d0;
+  border-radius: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+}
+.customer-search {
+  display: flex;
+  gap: 9px;
+  margin: 18px 0 12px;
+}
+.customer-search input {
+  flex: 1;
+  min-width: 0;
+}
+.customer-cancel {
+  width: 100%;
+}
+.language-setting {
+  margin: 18px 0;
+  text-align: left;
+}
+.language-setting label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+.language-dropdown {
+  position: relative;
+  color: var(--text);
+  text-align: left;
+}
+.language-dropdown summary {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fbfdfb;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+.language-dropdown summary:hover {
+  border-color: #c5dbce;
+  background: var(--accent-soft);
+}
+.language-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+.language-dropdown summary:focus-visible {
+  outline: 3px solid rgba(22, 131, 93, 0.4);
+  outline-offset: 3px;
+}
+.language-arrow {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  fill: currentColor;
+  transition: transform 200ms ease;
+}
+.language-dropdown[open] .language-arrow {
+  transform: rotate(180deg);
+}
+.language-options {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 5px);
+  left: 0;
+  display: flex;
+  width: 100%;
+  min-width: 190px;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px;
+  transform: translateY(-6px);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+}
+.language-dropdown[open] .language-options {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+.language-option {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+}
+.language-option:hover,
+.language-option[aria-pressed="true"] {
+  transform: none;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  box-shadow: none;
+}
+.form-notice {
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.form-notice.error {
+  background: #fff0ee;
+  color: #963c38;
+}
+.report-overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.report-overview h3 {
+  color: var(--text);
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.report-overview p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.report-overview button {
+  flex: 0 0 auto;
+}
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.report-header h2 {
+  font-size: clamp(21px, 4vw, 28px);
+  letter-spacing: -0.04em;
+}
+.report-header p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.report-stat {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+}
+.report-stat .stat-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.report-stat .stat-value {
+  margin-top: 8px;
+  font-size: clamp(18px, 3vw, 23px);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+}
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.report-chart-card {
+  min-width: 0;
+}
+.report-chart-card.wide {
+  grid-column: 1 / -1;
+}
+.report-chart-card h3 {
+  color: var(--text);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.report-chart-card .chart-subtitle {
+  margin-top: -3px;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.legend-dot.purchase {
+  background: #9dcbb0;
+}
+.chart-scroll {
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+.report-svg {
+  display: block;
+  width: 100%;
+  min-width: 480px;
+  height: auto;
+}
+.report-svg .grid-line {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.report-svg .axis-label {
+  fill: var(--muted);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+}
+.report-svg .sales-bar {
+  fill: var(--accent);
+}
+.report-svg .purchase-bar {
+  fill: #9dcbb0;
+}
+.report-svg .profit-area {
+  fill: rgba(22, 131, 93, 0.12);
+}
+.report-svg .profit-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+.report-svg .profit-point {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+.expense-chart {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr);
+  align-items: center;
+  gap: 18px;
+  min-height: 210px;
+}
+.expense-donut {
+  position: relative;
+  width: min(190px, 100%);
+  aspect-ratio: 1;
+  justify-self: center;
+  border-radius: 50%;
+  background: conic-gradient(
+    #16835d 0 35%,
+    #41ae7e 35% 63%,
+    #8dc9a6 63% 78%,
+    #b7dcc5 78% 90%,
+    #dcebe1 90% 100%
+  );
+}
+.expense-donut::after {
+  position: absolute;
+  inset: 25%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--text);
+  content: '100%';
+  font-size: 17px;
+  font-weight: 750;
+}
+.expense-legend {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+.expense-legend li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.expense-legend .expense-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.expense-swatch {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #16835d;
+}
+.expense-swatch.salary {
+  background: #41ae7e;
+}
+.expense-swatch.utilities {
+  background: #8dc9a6;
+}
+.expense-swatch.marketing {
+  background: #b7dcc5;
+}
+.expense-swatch.other {
+  background: #dcebe1;
+}
+.inv-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+.inv-bar input {
+  flex: 1 1 180px;
+}
+.bottomnav {
+  position: fixed;
+  z-index: 10;
+  bottom: 16px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  transform: translateX(-50%);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 28px rgba(29, 59, 45, 0.12);
+  backdrop-filter: blur(14px);
+}
+.bottomnav a {
+  position: relative;
+  display: flex;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  flex: 0 0 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--muted);
+  transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+.bottomnav a:hover {
+  transform: translateY(-2px);
+  background: var(--card2);
+  color: var(--accent-dark);
+}
+.bottomnav a.active {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+.bottomnav .icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.bottomnav .icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+.bottomnav .nav-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  width: max-content;
+  padding: 6px 9px;
+  transform: translate(-50%, 6px) scale(0.82);
+  border-radius: 7px;
+  background: var(--accent-dark);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+}
+.bottomnav a:hover .nav-tooltip,
+.bottomnav a:focus-visible .nav-tooltip {
+  transform: translate(-50%, 0) scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+#addCustFab {
+  position: fixed;
+  z-index: 20;
+  right: max(18px, calc((100vw - 1060px) / 2));
+  bottom: 92px;
+  width: 54px;
+  height: 54px;
+  min-height: 54px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 25px;
+  box-shadow: 0 8px 20px rgba(22, 131, 93, 0.3);
+}
+#addCustFab:hover {
+  background: var(--accent-dark);
+  box-shadow: 0 11px 24px rgba(22, 131, 93, 0.35);
+}
+@media (min-width: 700px) {
+  .grid.kpi {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  #dashboard .card:not(.kpi) {
+    padding: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .topbar,
+  .main {
+    width: calc(100% - 28px);
+  }
+  .topbar {
+    min-height: 72px;
+  }
+  .main {
+    gap: 13px;
+  }
+  .grid.kpi {
+    gap: 10px;
+  }
+  .credit-overview {
+    gap: 10px;
+  }
+  .credit-stat {
+    padding: 15px;
+  }
+  .report-summary {
+    gap: 8px;
+  }
+  .report-stat {
+    padding: 12px;
+  }
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+  .report-chart-card.wide {
+    grid-column: auto;
+  }
+  .report-header {
+    align-items: flex-start;
+  }
+  .report-header .secondary {
+    padding-inline: 10px;
+    white-space: nowrap;
+  }
+  .expense-chart {
+    gap: 12px;
+  }
+  .expense-legend li {
+    font-size: 11px;
+  }
+  .report-overview {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .report-overview button {
+    width: 100%;
+  }
+  .card {
+    padding: 15px;
+    border-radius: 15px;
+  }
+  #bills .card {
+    overflow-x: auto;
+  }
+  .bottomnav {
+    bottom: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="topbar"><h2 id="title">Dashboard</h2><button type="button" id="addCustomerButton" aria-label="Add customer" data-i18n-aria-label="addCustomer">+</button></div>
+<main class="main">
+  <section id="dashboard" class="section active">
+    <div class="credit-overview" aria-label="Customer credit totals" data-i18n-aria-label="creditTotals">
+      <div class="credit-stat">
+        <div class="stat-label" data-i18n="creditGiven">Credit loan</div>
+        <div class="stat-value" id="totalCreditGiven">₹0</div>
+      </div>
+      <div class="credit-stat">
+        <div class="stat-label" data-i18n="creditTaken">Taken</div>
+        <div class="stat-value" id="totalCreditTaken">₹0</div>
+      </div>
+    </div>
+    <div class="voice-action">
+      <button type="button" class="voice-button" aria-label="Voice input" aria-pressed="false">🎤</button>
+      <p class="voice-instruction">Bolne ke liye dabaiye</p>
+    </div>
+  </section>
+  <section id="profile" class="section"><div class="card profile"><div class="avatarbig">RK</div><h3 style="color:var(--text);font-size:16px;margin-bottom:10px" data-i18n="profile">Profile</h3><div class="form-row"><input value="Ramesh Kumar" aria-label="Name" data-i18n-aria-label="name"/></div><div class="form-row"><input value="ramesh@voicekhata.in" aria-label="Email" data-i18n-aria-label="email"/></div><div class="form-row"><input value="+91 98765 43210" aria-label="Phone number" data-i18n-aria-label="phoneNumber"/></div><div class="form-row"><input value="Ramesh General Store" aria-label="Store name" data-i18n-aria-label="storeName"/></div><div class="form-row"><input value="MG Road, Pune" aria-label="Address" data-i18n-aria-label="address"/></div><div class="language-setting"><label id="languageLabel" data-i18n="language">Language</label><details id="languageDropdown" class="language-dropdown" aria-labelledby="languageLabel"><summary><span id="languageSelectedLabel">English</span><svg class="language-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="language-options" role="group" aria-labelledby="languageLabel"><button type="button" class="language-option" data-language="en" aria-pressed="true">English</button><button type="button" class="language-option" data-language="hi" aria-pressed="false">हिन्दी</button><button type="button" class="language-option" data-language="bn" aria-pressed="false">বাংলা</button><button type="button" class="language-option" data-language="mr" aria-pressed="false">मराठी</button><button type="button" class="language-option" data-language="te" aria-pressed="false">తెలుగు</button><button type="button" class="language-option" data-language="ta" aria-pressed="false">தமிழ்</button></div></details></div><p id="languageNotice" class="form-notice" role="status" aria-live="polite" hidden></p><button style="width:100%" data-i18n="saveChanges">Save Changes</button></div></section>
+  <section id="bills" class="section">
+    <div class="card report-overview">
+      <div>
+        <h3 data-i18n="reportsSummary">Reports summary</h3>
+        <p data-i18n="reportsLine">Total sales ₹4.82L · Purchases ₹3.11L · Profit ₹1.71L</p>
+      </div>
+      <button id="viewReportButton" type="button" data-i18n="viewReport">View report</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px"><button id="tabSales" style="flex:1" data-i18n="sales" aria-selected="true">Sales</button><button id="tabPurch" class="secondary" style="flex:1" data-i18n="purchases" aria-selected="false">Purchases</button></div>
+    <div class="card" id="salesCard"><div class="inv-bar"><input id="salesSearch" type="search" placeholder="Search sales bills..." data-i18n-placeholder="searchSalesBills" aria-label="Search sales bills" data-i18n-aria-label="searchSalesBills"/><button type="button" id="addSalesBillButton" data-i18n="addBill">+ Add Bill</button><input type="file" id="salesFile" accept="image/*,application/pdf" style="display:none"/></div><table class="table"><thead><tr><th data-i18n="bill">Bill</th><th data-i18n="date">Date</th><th data-i18n="customer">Customer</th><th data-i18n="amountShort">Amt</th><th data-i18n="status">Status</th></tr></thead><tbody id="billsTable"></tbody></table></div>
+    <div class="card" id="purchCard" style="display:none"><div class="inv-bar"><input id="purchSearch" type="search" placeholder="Search purchase bills..." data-i18n-placeholder="searchPurchaseBills" aria-label="Search purchase bills" data-i18n-aria-label="searchPurchaseBills"/><button type="button" id="addPurchBillButton" data-i18n="addBill">+ Add Bill</button><input type="file" id="purchFile" accept="image/*,application/pdf" style="display:none"/></div><table class="table"><thead><tr><th data-i18n="bill">Bill</th><th data-i18n="date">Date</th><th data-i18n="vendor">Vendor</th><th data-i18n="amountShort">Amt</th><th data-i18n="status">Status</th></tr></thead><tbody id="purchTable"></tbody></table></div>
+  </section>
+  <section id="inventory" class="section"><div class="card"><div class="inv-bar"><input id="invSearch" placeholder="Search..." data-i18n-placeholder="search"/><button data-i18n="add">+ Add</button></div><table class="table"><thead><tr><th data-i18n="item">Item</th><th data-i18n="stock">Stock</th><th data-i18n="price">Price</th><th data-i18n="status">Status</th></tr></thead><tbody id="invTable"></tbody></table></div></section>
+  <section id="customers" class="section">
+    <div class="card">
+      <div class="inv-bar">
+        <div>
+          <h3 style="color:var(--text);font-size:17px;letter-spacing:-.02em;text-transform:none" data-i18n="customers">Customers</h3>
+          <p style="color:var(--muted);font-size:13px" data-i18n="savedCustomerEntries">Your saved customer credit entries</p>
+        </div>
+        <button id="customersAddButton" type="button"><span aria-hidden="true">＋</span> <span data-i18n="addCustomer">Add customer</span></button>
+      </div>
+      <form id="customerSearchForm" class="customer-search">
+        <input id="customerSearch" type="search" placeholder="Search customers by name or phone" data-i18n-placeholder="searchCustomers" aria-label="Search customers" data-i18n-aria-label="searchCustomers" />
+        <button type="submit" data-i18n="searchButton">Search</button>
+      </form>
+      <p id="customerNotice" class="form-notice" role="status" aria-live="polite" hidden></p>
+      <div id="customerList" class="customer-list"></div>
+    </div>
+  </section>
+  <section id="addCustomer" class="section">
+    <div class="card customer-card">
+      <form id="customerForm" class="customer-form">
+        <div>
+          <h3 class="heading" id="customerFormTitle">Add customer</h3>
+          <p class="form-intro" data-i18n="customerFormIntro">Add contact details and record a credit entry.</p>
+        </div>
+        <div class="input-field">
+          <input id="customerName" type="text" placeholder=" " autocomplete="name" required />
+          <label for="customerName" data-i18n="customerName">Customer name</label>
+        </div>
+        <div class="input-field">
+          <input id="customerPhone" type="tel" placeholder=" " autocomplete="tel" required />
+          <label for="customerPhone" data-i18n="phoneNumber">Phone number</label>
+        </div>
+        <div class="credit-toggle" role="group" aria-label="Credit type" data-i18n-aria-label="creditType">
+          <button type="button" class="credit-option" data-type="given" aria-pressed="true" data-i18n="creditGiven">Credit given</button>
+          <button type="button" class="credit-option credit-taken" data-type="taken" aria-pressed="false" data-i18n="creditTaken">Got</button>
+        </div>
+        <div class="input-field">
+          <input id="customerAmount" type="number" min="0.01" step="0.01" placeholder=" " inputmode="decimal" required />
+          <label id="customerAmountLabel" for="customerAmount">Amount (credit given)</label>
+        </div>
+        <div>
+          <label class="field-label" for="customerDate" data-i18n="dateTime">Date and time</label>
+          <input id="customerDate" type="datetime-local" required />
+        </div>
+        <div>
+          <label class="attach-button" for="billAttach"><span aria-hidden="true">＋</span> <span data-i18n="attachBill">Attach bill</span></label>
+          <input type="file" id="billAttach" accept="image/*,application/pdf" hidden />
+        </div>
+        <p id="customerFormNotice" class="form-notice" role="status" aria-live="polite" hidden></p>
+        <button type="button" id="cancelCustomerEdit" class="secondary customer-cancel" hidden data-i18n="cancel">Cancel</button>
+        <button type="submit" class="save-customer" id="saveCustomerButton">Save customer</button>
+      </form>
+    </div>
+  </section>
+  <section id="report" class="section">
+    <div class="report-header">
+      <div>
+        <h2 data-i18n="reportTitle">Business report</h2>
+        <p data-i18n="reportSubtitle">Sales, purchases, profit and expenses</p>
+      </div>
+      <button type="button" class="secondary" id="backToBillsButton" data-i18n="backToBills">Back to bills</button>
+    </div>
+    <div class="report-summary">
+      <div class="report-stat"><div class="stat-label" data-i18n="totalSales">Total sales</div><div class="stat-value">₹4.82L</div></div>
+      <div class="report-stat"><div class="stat-label" data-i18n="purchases">Purchases</div><div class="stat-value">₹3.11L</div></div>
+      <div class="report-stat"><div class="stat-label" data-i18n="profit">Profit</div><div class="stat-value">₹1.71L</div></div>
+    </div>
+    <div class="report-grid">
+      <article class="card report-chart-card wide">
+        <h3 id="monthlyChartTitle" data-i18n="monthlyComparison">Monthly sales &amp; purchases</h3>
+        <p class="chart-subtitle" data-i18n="chartThousands">Monthly totals (₹k)</p>
+        <div class="chart-legend">
+          <span><i class="legend-dot"></i><span data-i18n="sales">Sales</span></span>
+          <span><i class="legend-dot purchase"></i><span data-i18n="purchases">Purchases</span></span>
+        </div>
+        <div class="chart-scroll">
+          <svg class="report-svg" viewBox="0 0 640 280" role="img" aria-labelledby="monthlyChartTitle monthlyChartDescription">
+            <desc id="monthlyChartDescription" data-i18n="monthlyChartDescription">Monthly comparison of sales and purchases from January to June.</desc>
+            <g class="grid-line"><path d="M58 50H608M58 110H608M58 170H608M58 230H608"></path></g>
+            <g class="axis-label" text-anchor="end">
+              <text x="48" y="54">60</text><text x="48" y="114">40</text><text x="48" y="174">20</text><text x="48" y="234">0</text>
+            </g>
+            <g>
+              <rect class="sales-bar" x="75" y="134" width="22" height="96" rx="4"></rect><rect class="purchase-bar" x="101" y="170" width="22" height="60" rx="4"></rect>
+              <rect class="sales-bar" x="165" y="116" width="22" height="114" rx="4"></rect><rect class="purchase-bar" x="191" y="158" width="22" height="72" rx="4"></rect>
+              <rect class="sales-bar" x="255" y="125" width="22" height="105" rx="4"></rect><rect class="purchase-bar" x="281" y="164" width="22" height="66" rx="4"></rect>
+              <rect class="sales-bar" x="345" y="104" width="22" height="126" rx="4"></rect><rect class="purchase-bar" x="371" y="146" width="22" height="84" rx="4"></rect>
+              <rect class="sales-bar" x="435" y="86" width="22" height="144" rx="4"></rect><rect class="purchase-bar" x="461" y="140" width="22" height="90" rx="4"></rect>
+              <rect class="sales-bar" x="525" y="74" width="22" height="156" rx="4"></rect><rect class="purchase-bar" x="551" y="128" width="22" height="102" rx="4"></rect>
+            </g>
+            <g class="axis-label" text-anchor="middle">
+              <text x="99" y="258">Jan</text><text x="189" y="258">Feb</text><text x="279" y="258">Mar</text>
+              <text x="369" y="258">Apr</text><text x="459" y="258">May</text><text x="549" y="258">Jun</text>
+            </g>
+          </svg>
+        </div>
+      </article>
+      <article class="card report-chart-card">
+        <h3 id="profitChartTitle" data-i18n="profitTrend">Profit trend</h3>
+        <p class="chart-subtitle" data-i18n="profitThousands">Monthly profit (₹k)</p>
+        <div class="chart-scroll">
+          <svg class="report-svg" viewBox="0 0 640 230" role="img" aria-labelledby="profitChartTitle profitChartDescription">
+            <desc id="profitChartDescription" data-i18n="profitChartDescription">Monthly profit trend from January to June.</desc>
+            <g class="grid-line"><path d="M58 50H608M58 82H608M58 114H608M58 146H608M58 178H608"></path></g>
+            <g class="axis-label" text-anchor="end">
+              <text x="48" y="54">18</text><text x="48" y="86">16</text><text x="48" y="118">14</text><text x="48" y="150">12</text><text x="48" y="182">10</text>
+            </g>
+            <path class="profit-area" d="M80 146L176 114L272 130L368 114L464 50L560 50V190H80Z"></path>
+            <polyline class="profit-line" points="80,146 176,114 272,130 368,114 464,50 560,50"></polyline>
+            <g>
+              <circle class="profit-point" cx="80" cy="146" r="5"></circle><circle class="profit-point" cx="176" cy="114" r="5"></circle>
+              <circle class="profit-point" cx="272" cy="130" r="5"></circle><circle class="profit-point" cx="368" cy="114" r="5"></circle>
+              <circle class="profit-point" cx="464" cy="50" r="5"></circle><circle class="profit-point" cx="560" cy="50" r="5"></circle>
+            </g>
+            <g class="axis-label" text-anchor="middle">
+              <text x="80" y="216">Jan</text><text x="176" y="216">Feb</text><text x="272" y="216">Mar</text>
+              <text x="368" y="216">Apr</text><text x="464" y="216">May</text><text x="560" y="216">Jun</text>
+            </g>
+          </svg>
+        </div>
+      </article>
+      <article class="card report-chart-card">
+        <h3 data-i18n="expenseBreakdown">Expense breakdown</h3>
+        <p class="chart-subtitle" data-i18n="expenseByCategory">Share by category</p>
+        <div class="expense-chart">
+          <div class="expense-donut" role="img" aria-label="Expenses: rent 35%, salary 28%, utilities 15%, marketing 12%, other 10%" data-i18n-aria-label="expenseChartDescription"></div>
+          <ul class="expense-legend">
+            <li><span class="expense-name"><i class="expense-swatch"></i><span data-i18n="rent">Rent</span></span><strong>35%</strong></li>
+            <li><span class="expense-name"><i class="expense-swatch salary"></i><span data-i18n="salary">Salary</span></span><strong>28%</strong></li>
+            <li><span class="expense-name"><i class="expense-swatch utilities"></i><span data-i18n="utilities">Utilities</span></span><strong>15%</strong></li>
+            <li><span class="expense-name"><i class="expense-swatch marketing"></i><span data-i18n="marketing">Marketing</span></span><strong>12%</strong></li>
+            <li><span class="expense-name"><i class="expense-swatch other"></i><span data-i18n="other">Other</span></span><strong>10%</strong></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+<nav class="bottomnav" aria-label="Main navigation"><a href="#" data-view="dashboard" class="active" aria-current="page" aria-label="Home" data-i18n-aria-label="home"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"></path><path d="M5 9v11h14V9M9 20v-6h6v6"></path></svg></span><span class="nav-tooltip" aria-hidden="true" data-i18n="home">Home</span></a><a href="#" data-view="bills" aria-label="Bills" data-i18n-aria-label="bills"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span><span class="nav-tooltip" aria-hidden="true" data-i18n="bills">Bills</span></a><a href="#" data-view="customers" aria-label="Customers" data-i18n-aria-label="customers"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20v-1a6.5 6.5 0 0 1 13 0v1zM16 5.2a3.5 3.5 0 0 1 0 6.6M18 14a5 5 0 0 1 3.5 4.8V20h-3"></path></svg></span><span class="nav-tooltip" aria-hidden="true" data-i18n="customers">Customers</span></a><a href="#" data-view="inventory" aria-label="Stock" data-i18n-aria-label="stock"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5zM3 8v9l9 5 9-5V8M12 13v9"></path></svg></span><span class="nav-tooltip" aria-hidden="true" data-i18n="stock">Stock</span></a><a href="#" data-view="profile" aria-label="Profile" data-i18n-aria-label="openProfile"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20v-1a8 8 0 0 1 16 0v1"></path></svg></span><span class="nav-tooltip" aria-hidden="true" data-i18n="profile">Profile</span></a></nav>
+<script>
+const views=document.querySelectorAll('.bottomnav a');
+const sections=document.querySelectorAll('.section');
+const title=document.getElementById('title');
+const translations={
+  en:{
+    home:'Home',dashboard:'Dashboard',totalSales:'Total sales',purchases:'Purchases',profit:'Profit',expenses:'Expenses',
+    creditGiven:'Credit loan',creditTaken:'Taken',creditTotals:'Customer credit totals',summary:'Summary',
+    summaryHint:'Open Bills for detailed reports and transactions.',profile:'Profile',language:'Language',saveChanges:'Save changes',
+    name:'Name',email:'Email',phoneNumber:'Phone number',storeName:'Store name',address:'Address',openProfile:'Open profile',
+    bills:'Bills',reportsSummary:'Reports summary',reportsLine:'Total sales ₹4.82L · Purchases ₹3.11L · Profit ₹1.71L',sales:'Sales',purchase:'Purchase',expense:'Expense',
+    searchSalesBills:'Search sales bills...',searchPurchaseBills:'Search purchase bills...',addBill:'+ Add bill',
+    bill:'Bill',date:'Date',customer:'Customer',vendor:'Vendor',amountShort:'Amount',status:'Status',paid:'Paid',pending:'Pending',
+    search:'Search...',add:'+ Add',item:'Item',stock:'Stock',price:'Price',
+    customers:'Customers',savedCustomerEntries:'Your saved customer credit entries',searchCustomers:'Search by customer name or phone',
+    searchButton:'Search',addCustomer:'Add customer',addCustomerTitle:'Add customer',editCustomerTitle:'Edit customer',
+    customerFormIntro:'Add contact details and record a credit entry.',customerName:'Customer name',creditType:'Credit type',
+    amount:'Amount',amountGiven:'Amount (credit given)',amountTaken:'Amount (got)',dateTime:'Date and time',attachBill:'Attach bill',saveCustomer:'Save customer',updateCustomer:'Update customer',
+    cancel:'Cancel',noCustomers:'No customers added yet. Add a customer to start tracking credit.',
+    noCustomerMatches:'No customers match your search.',customerStorageLoadError:'Saved customers could not be loaded, so the list was reset. You can add customers again.',
+    customerStorageUnavailable:'Customer storage is unavailable. Resolve the storage issue before saving.',
+    customerStorageSaveError:'This customer could not be saved to browser storage. Check available storage and try again.',
+    invalidCustomer:'Enter a valid name, phone number, amount, and date.',customerMissing:'This customer is no longer available. Return to the customer list and try again.',
+    languageLoadError:'The saved language could not be loaded. English is being used.',
+    languageSaveError:'The language changed for this session but could not be saved.',
+    stockOut:'Out',stockLow:'Low',inStock:'In stock',
+    reportSalesTitle:'Sales report',reportPurchTitle:'Purchase report',reportExpTitle:'Expense report',
+    reportSalesPlaceholder:'Detailed sales report placeholder.',reportPurchPlaceholder:'Detailed purchase report placeholder.',
+    reportExpPlaceholder:'Detailed expense report placeholder.',
+    viewReport:'View report',reportTitle:'Business report',reportSubtitle:'Sales, purchases, profit and expenses',backToBills:'Back to bills',
+    monthlyComparison:'Monthly sales & purchases',chartThousands:'Monthly totals (₹k)',monthlyChartDescription:'Monthly comparison of sales and purchases from January to June.',
+    profitTrend:'Profit trend',profitThousands:'Monthly profit (₹k)',profitChartDescription:'Monthly profit trend from January to June.',
+    expenseBreakdown:'Expense breakdown',expenseByCategory:'Share by category',
+    expenseChartDescription:'Expenses: rent 35%, salary 28%, utilities 15%, marketing 12%, other 10%.',
+    rent:'Rent',salary:'Salary',utilities:'Utilities',marketing:'Marketing',other:'Other'
+  },
+  hi:{
+    home:'होम',dashboard:'डैशबोर्ड',totalSales:'कुल बिक्री',purchases:'खरीदारी',profit:'लाभ',expenses:'खर्च',
+    creditGiven:'दिया गया उधार',creditTaken:'मिला हुआ उधार',creditTotals:'ग्राहक उधार का कुल योग',summary:'सारांश',
+    summaryHint:'विस्तृत रिपोर्ट और लेन-देन के लिए बिल खोलें।',profile:'प्रोफ़ाइल',language:'भाषा',saveChanges:'बदलाव सहेजें',
+    name:'नाम',email:'ईमेल',phoneNumber:'फ़ोन नंबर',storeName:'दुकान का नाम',address:'पता',openProfile:'प्रोफ़ाइल खोलें',
+    bills:'बिल',reportsSummary:'रिपोर्ट सारांश',reportsLine:'कुल बिक्री ₹4.82L · खरीद ₹3.11L · लाभ ₹1.71L',sales:'बिक्री',purchase:'खरीद',expense:'खर्च',
+    searchSalesBills:'बिक्री के बिल खोजें...',searchPurchaseBills:'खरीद के बिल खोजें...',addBill:'+ बिल जोड़ें',
+    bill:'बिल',date:'तारीख',customer:'ग्राहक',vendor:'विक्रेता',amountShort:'राशि',status:'स्थिति',paid:'भुगतान हुआ',pending:'बाकी',
+    search:'खोजें...',add:'+ जोड़ें',item:'वस्तु',stock:'स्टॉक',price:'कीमत',
+    customers:'ग्राहक',savedCustomerEntries:'आपके सहेजे गए ग्राहक उधार रिकॉर्ड',searchCustomers:'नाम या फ़ोन से ग्राहक खोजें',
+    searchButton:'खोजें',addCustomer:'ग्राहक जोड़ें',addCustomerTitle:'ग्राहक जोड़ें',editCustomerTitle:'ग्राहक संपादित करें',
+    customerFormIntro:'संपर्क विवरण जोड़ें और उधार दर्ज करें।',customerName:'ग्राहक का नाम',creditType:'उधार का प्रकार',
+    amount:'राशि',amountGiven:'राशि (दिया गया उधार)',amountTaken:'राशि (मिला हुआ उधार)',dateTime:'तारीख और समय',attachBill:'बिल संलग्न करें',saveCustomer:'ग्राहक सहेजें',updateCustomer:'ग्राहक अपडेट करें',
+    cancel:'रद्द करें',noCustomers:'अभी कोई ग्राहक नहीं है। उधार ट्रैक करने के लिए ग्राहक जोड़ें।',
+    noCustomerMatches:'आपकी खोज से कोई ग्राहक नहीं मिला।',customerStorageLoadError:'सहेजे गए ग्राहक लोड नहीं हो सके, इसलिए सूची रीसेट कर दी गई है। आप फिर से ग्राहक जोड़ सकते हैं।',
+    customerStorageUnavailable:'ग्राहक स्टोरेज उपलब्ध नहीं है। सहेजने से पहले समस्या ठीक करें।',
+    customerStorageSaveError:'ग्राहक ब्राउज़र स्टोरेज में सहेजा नहीं जा सका। स्टोरेज जांचकर फिर कोशिश करें।',
+    invalidCustomer:'मान्य नाम, फ़ोन नंबर, राशि और तारीख दर्ज करें।',customerMissing:'यह ग्राहक अब उपलब्ध नहीं है। ग्राहक सूची पर लौटकर फिर कोशिश करें।',
+    languageLoadError:'सहेजी गई भाषा लोड नहीं हो सकी। अंग्रेज़ी का उपयोग किया जा रहा है।',
+    languageSaveError:'इस सत्र के लिए भाषा बदल गई है, लेकिन बदलाव सहेजा नहीं जा सका।',
+    stockOut:'खत्म',stockLow:'कम',inStock:'उपलब्ध',
+    reportSalesTitle:'बिक्री रिपोर्ट',reportPurchTitle:'खरीद रिपोर्ट',reportExpTitle:'खर्च रिपोर्ट',
+    reportSalesPlaceholder:'विस्तृत बिक्री रिपोर्ट।',reportPurchPlaceholder:'विस्तृत खरीद रिपोर्ट।',reportExpPlaceholder:'विस्तृत खर्च रिपोर्ट।',
+    viewReport:'रिपोर्ट देखें',reportTitle:'व्यापार रिपोर्ट',reportSubtitle:'बिक्री, खरीद, लाभ और खर्च',backToBills:'बिल पर वापस जाएँ',
+    monthlyComparison:'मासिक बिक्री और खरीद',chartThousands:'मासिक कुल (₹ हज़ार)',monthlyChartDescription:'जनवरी से जून तक बिक्री और खरीद की मासिक तुलना।',
+    profitTrend:'लाभ का रुझान',profitThousands:'मासिक लाभ (₹ हज़ार)',profitChartDescription:'जनवरी से जून तक मासिक लाभ का रुझान।',
+    expenseBreakdown:'खर्च का विवरण',expenseByCategory:'श्रेणी के अनुसार हिस्सा',
+    expenseChartDescription:'खर्च: किराया 35%, वेतन 28%, उपयोगिताएँ 15%, मार्केटिंग 12%, अन्य 10%.',
+    rent:'किराया',salary:'वेतन',utilities:'उपयोगिताएँ',marketing:'मार्केटिंग',other:'अन्य'
+  },
+  bn:{
+    home:'হোম',dashboard:'ড্যাশবোর্ড',totalSales:'মোট বিক্রয়',purchases:'কেনাকাটা',profit:'লাভ',expenses:'খরচ',
+    creditGiven:'দেওয়া ধার',creditTaken:'পাওয়া ধার',creditTotals:'গ্রাহক ধার মোট',summary:'সারাংশ',
+    summaryHint:'বিস্তারিত প্রতিবেদন ও লেনদেনের জন্য বিল খুলুন।',profile:'প্রোফাইল',language:'ভাষা',saveChanges:'পরিবর্তন সংরক্ষণ',
+    name:'নাম',email:'ইমেল',phoneNumber:'ফোন নম্বর',storeName:'দোকানের নাম',address:'ঠিকানা',openProfile:'প্রোফাইল খুলুন',
+    bills:'বিল',reportsSummary:'প্রতিবেদনের সারাংশ',reportsLine:'মোট বিক্রয় ₹4.82L · কেনাকাটা ₹3.11L · লাভ ₹1.71L',sales:'বিক্রয়',purchase:'কেনাকাটা',expense:'খরচ',
+    searchSalesBills:'বিক্রয় বিল খুঁজুন...',searchPurchaseBills:'কেনাকাটার বিল খুঁজুন...',addBill:'+ বিল যোগ করুন',
+    bill:'বিল',date:'তারিখ',customer:'গ্রাহক',vendor:'বিক্রেতা',amountShort:'পরিমাণ',status:'অবস্থা',paid:'পরিশোধিত',pending:'বাকি',
+    search:'খুঁজুন...',add:'+ যোগ করুন',item:'পণ্য',stock:'স্টক',price:'দাম',
+    customers:'গ্রাহক',savedCustomerEntries:'সংরক্ষিত গ্রাহকের ধার হিসাব',searchCustomers:'নাম বা ফোন দিয়ে গ্রাহক খুঁজুন',
+    searchButton:'খুঁজুন',addCustomer:'গ্রাহক যোগ করুন',addCustomerTitle:'গ্রাহক যোগ করুন',editCustomerTitle:'গ্রাহক সম্পাদনা',
+    customerFormIntro:'যোগাযোগের তথ্য ও ধার হিসাব যোগ করুন।',customerName:'গ্রাহকের নাম',creditType:'ধারের ধরন',
+    amount:'পরিমাণ',amountGiven:'পরিমাণ (দেওয়া ধার)',amountTaken:'পরিমাণ (পাওয়া ধার)',dateTime:'তারিখ ও সময়',attachBill:'বিল সংযুক্ত করুন',saveCustomer:'গ্রাহক সংরক্ষণ',updateCustomer:'গ্রাহক আপডেট',
+    cancel:'বাতিল',noCustomers:'এখনও কোনো গ্রাহক নেই। ধার হিসাব রাখতে গ্রাহক যোগ করুন।',
+    noCustomerMatches:'আপনার অনুসন্ধানে কোনো গ্রাহক মেলেনি।',customerStorageLoadError:'সংরক্ষিত গ্রাহক লোড করা যায়নি, তাই তালিকা রিসেট করা হয়েছে। আপনি আবার গ্রাহক যোগ করতে পারেন।',
+    customerStorageUnavailable:'গ্রাহক স্টোরেজ উপলভ্য নয়। সংরক্ষণের আগে সমস্যাটি সমাধান করুন।',
+    customerStorageSaveError:'ব্রাউজার স্টোরেজে গ্রাহক সংরক্ষণ করা যায়নি। জায়গা পরীক্ষা করে আবার চেষ্টা করুন।',
+    invalidCustomer:'সঠিক নাম, ফোন নম্বর, পরিমাণ এবং তারিখ দিন।',customerMissing:'এই গ্রাহক আর উপলভ্য নেই। গ্রাহক তালিকায় ফিরে আবার চেষ্টা করুন।',
+    languageLoadError:'সংরক্ষিত ভাষা লোড করা যায়নি। ইংরেজি ব্যবহার করা হচ্ছে।',
+    languageSaveError:'এই সেশনের জন্য ভাষা বদলেছে, তবে সংরক্ষণ করা যায়নি।',
+    stockOut:'শেষ',stockLow:'কম',inStock:'মজুত আছে',
+    reportSalesTitle:'বিক্রয় প্রতিবেদন',reportPurchTitle:'কেনাকাটার প্রতিবেদন',reportExpTitle:'খরচের প্রতিবেদন',
+    reportSalesPlaceholder:'বিস্তারিত বিক্রয় প্রতিবেদন।',reportPurchPlaceholder:'বিস্তারিত কেনাকাটার প্রতিবেদন।',reportExpPlaceholder:'বিস্তারিত খরচের প্রতিবেদন।',
+    viewReport:'প্রতিবেদন দেখুন',reportTitle:'ব্যবসার প্রতিবেদন',reportSubtitle:'বিক্রয়, কেনাকাটা, লাভ ও খরচ',backToBills:'বিলে ফিরে যান',
+    monthlyComparison:'মাসিক বিক্রয় ও কেনাকাটা',chartThousands:'মাসিক মোট (₹ হাজার)',monthlyChartDescription:'জানুয়ারি থেকে জুন পর্যন্ত বিক্রয় ও কেনাকাটার তুলনা।',
+    profitTrend:'লাভের প্রবণতা',profitThousands:'মাসিক লাভ (₹ হাজার)',profitChartDescription:'জানুয়ারি থেকে জুন পর্যন্ত মাসিক লাভের প্রবণতা।',
+    expenseBreakdown:'খরচের বিবরণ',expenseByCategory:'বিভাগ অনুযায়ী অংশ',
+    expenseChartDescription:'খরচ: ভাড়া ৩৫%, বেতন ২৮%, ইউটিলিটি ১৫%, বিপণন ১২%, অন্যান্য ১০%।',
+    rent:'ভাড়া',salary:'বেতন',utilities:'ইউটিলিটি',marketing:'বিপণন',other:'অন্যান্য'
+  },
+  mr:{
+    home:'मुख्यपृष्ठ',dashboard:'डॅशबोर्ड',totalSales:'एकूण विक्री',purchases:'खरेदी',profit:'नफा',expenses:'खर्च',
+    creditGiven:'दिलेली उधारी',creditTaken:'मिळालेली उधारी',creditTotals:'ग्राहक उधारीची एकूण रक्कम',summary:'सारांश',
+    summaryHint:'तपशीलवार अहवाल आणि व्यवहारांसाठी बिले उघडा.',profile:'प्रोफाइल',language:'भाषा',saveChanges:'बदल जतन करा',
+    name:'नाव',email:'ईमेल',phoneNumber:'फोन नंबर',storeName:'दुकानाचे नाव',address:'पत्ता',openProfile:'प्रोफाइल उघडा',
+    bills:'बिले',reportsSummary:'अहवालाचा सारांश',reportsLine:'एकूण विक्री ₹4.82L · खरेदी ₹3.11L · नफा ₹1.71L',sales:'विक्री',purchase:'खरेदी',expense:'खर्च',
+    searchSalesBills:'विक्रीची बिले शोधा...',searchPurchaseBills:'खरेदीची बिले शोधा...',addBill:'+ बिल जोडा',
+    bill:'बिल',date:'तारीख',customer:'ग्राहक',vendor:'विक्रेता',amountShort:'रक्कम',status:'स्थिती',paid:'भरले',pending:'प्रलंबित',
+    search:'शोधा...',add:'+ जोडा',item:'वस्तू',stock:'साठा',price:'किंमत',
+    customers:'ग्राहक',savedCustomerEntries:'जतन केलेल्या ग्राहक उधारी नोंदी',searchCustomers:'नाव किंवा फोनने ग्राहक शोधा',
+    searchButton:'शोधा',addCustomer:'ग्राहक जोडा',addCustomerTitle:'ग्राहक जोडा',editCustomerTitle:'ग्राहक संपादित करा',
+    customerFormIntro:'संपर्क तपशील जोडा आणि उधारी नोंदवा.',customerName:'ग्राहकाचे नाव',creditType:'उधारीचा प्रकार',
+    amount:'रक्कम',amountGiven:'रक्कम (दिलेली उधारी)',amountTaken:'रक्कम (मिळालेली उधारी)',dateTime:'तारीख आणि वेळ',attachBill:'बिल जोडा',saveCustomer:'ग्राहक जतन करा',updateCustomer:'ग्राहक अद्यतनित करा',
+    cancel:'रद्द करा',noCustomers:'अजून ग्राहक जोडलेले नाहीत. उधारीचा मागोवा घेण्यासाठी ग्राहक जोडा.',
+    noCustomerMatches:'तुमच्या शोधाशी जुळणारा ग्राहक नाही.',customerStorageLoadError:'जतन केलेले ग्राहक लोड करता आले नाहीत, म्हणून यादी रीसेट केली आहे. तुम्ही पुन्हा ग्राहक जोडू शकता.',
+    customerStorageUnavailable:'ग्राहक स्टोरेज उपलब्ध नाही. जतन करण्यापूर्वी समस्या सोडवा.',
+    customerStorageSaveError:'ग्राहक ब्राउझर स्टोरेजमध्ये जतन करता आला नाही. स्टोरेज तपासून पुन्हा प्रयत्न करा.',
+    invalidCustomer:'योग्य नाव, फोन नंबर, रक्कम आणि तारीख भरा.',customerMissing:'हा ग्राहक आता उपलब्ध नाही. ग्राहक यादीवर परत जाऊन पुन्हा प्रयत्न करा.',
+    languageLoadError:'जतन केलेली भाषा लोड करता आली नाही. इंग्रजी वापरली जात आहे.',
+    languageSaveError:'या सत्रासाठी भाषा बदलली आहे, पण जतन करता आली नाही.',
+    stockOut:'संपले',stockLow:'कमी',inStock:'उपलब्ध',
+    reportSalesTitle:'विक्री अहवाल',reportPurchTitle:'खरेदी अहवाल',reportExpTitle:'खर्च अहवाल',
+    reportSalesPlaceholder:'तपशीलवार विक्री अहवाल.',reportPurchPlaceholder:'तपशीलवार खरेदी अहवाल.',reportExpPlaceholder:'तपशीलवार खर्च अहवाल.',
+    viewReport:'अहवाल पहा',reportTitle:'व्यवसाय अहवाल',reportSubtitle:'विक्री, खरेदी, नफा आणि खर्च',backToBills:'बिलांकडे परत जा',
+    monthlyComparison:'मासिक विक्री आणि खरेदी',chartThousands:'मासिक एकूण (₹ हजार)',monthlyChartDescription:'जानेवारी ते जूनमधील विक्री आणि खरेदीची तुलना.',
+    profitTrend:'नफ्याचा कल',profitThousands:'मासिक नफा (₹ हजार)',profitChartDescription:'जानेवारी ते जूनमधील मासिक नफ्याचा कल.',
+    expenseBreakdown:'खर्चाचा तपशील',expenseByCategory:'वर्गानुसार वाटा',
+    expenseChartDescription:'खर्च: भाडे ३५%, पगार २८%, सुविधा १५%, विपणन १२%, इतर १०%.',
+    rent:'भाडे',salary:'पगार',utilities:'सुविधा',marketing:'विपणन',other:'इतर'
+  },
+  te:{
+    home:'హోమ్',dashboard:'డాష్‌బోర్డ్',totalSales:'మొత్తం అమ్మకాలు',purchases:'కొనుగోళ్లు',profit:'లాభం',expenses:'ఖర్చులు',
+    creditGiven:'ఇచ్చిన అప్పు',creditTaken:'వచ్చిన అప్పు',creditTotals:'కస్టమర్ అప్పుల మొత్తం',summary:'సారాంశం',
+    summaryHint:'వివరమైన నివేదికలు, లావాదేవీల కోసం బిల్లులు తెరవండి.',profile:'ప్రొఫైల్',language:'భాష',saveChanges:'మార్పులను భద్రపరచండి',
+    name:'పేరు',email:'ఇమెయిల్',phoneNumber:'ఫోన్ నంబర్',storeName:'దుకాణం పేరు',address:'చిరునామా',openProfile:'ప్రొఫైల్ తెరవండి',
+    bills:'బిల్లులు',reportsSummary:'నివేదికల సారాంశం',reportsLine:'మొత్తం అమ్మకాలు ₹4.82L · కొనుగోళ్లు ₹3.11L · లాభం ₹1.71L',sales:'అమ్మకాలు',purchase:'కొనుగోలు',expense:'ఖర్చు',
+    searchSalesBills:'అమ్మకాల బిల్లులను వెతకండి...',searchPurchaseBills:'కొనుగోలు బిల్లులను వెతకండి...',addBill:'+ బిల్లు జోడించండి',
+    bill:'బిల్లు',date:'తేదీ',customer:'కస్టమర్',vendor:'విక్రేత',amountShort:'మొత్తం',status:'స్థితి',paid:'చెల్లించబడింది',pending:'పెండింగ్',
+    search:'వెతకండి...',add:'+ జోడించండి',item:'వస్తువు',stock:'నిల్వ',price:'ధర',
+    customers:'కస్టమర్లు',savedCustomerEntries:'మీరు భద్రపరిచిన కస్టమర్ అప్పు వివరాలు',searchCustomers:'పేరు లేదా ఫోన్‌తో వెతకండి',
+    searchButton:'వెతకండి',addCustomer:'కస్టమర్‌ను జోడించండి',addCustomerTitle:'కస్టమర్‌ను జోడించండి',editCustomerTitle:'కస్టమర్ వివరాలను సవరించండి',
+    customerFormIntro:'సంప్రదింపు వివరాలు జోడించి అప్పును నమోదు చేయండి.',customerName:'కస్టమర్ పేరు',creditType:'అప్పు రకం',
+    amount:'మొత్తం',amountGiven:'మొత్తం (ఇచ్చిన అప్పు)',amountTaken:'మొత్తం (వచ్చిన అప్పు)',dateTime:'తేదీ మరియు సమయం',attachBill:'బిల్లును జతచేయండి',saveCustomer:'కస్టమర్‌ను భద్రపరచండి',updateCustomer:'కస్టమర్‌ను నవీకరించండి',
+    cancel:'రద్దు చేయండి',noCustomers:'ఇంకా కస్టమర్లు లేరు. అప్పులను ట్రాక్ చేయడానికి కస్టమర్‌ను జోడించండి.',
+    noCustomerMatches:'మీ శోధనకు కస్టమర్లు సరిపోలలేదు.',customerStorageLoadError:'భద్రపరిచిన కస్టమర్లను లోడ్ చేయలేకపోయాం, కాబట్టి జాబితా రీసెట్ అయింది. మీరు మళ్లీ కస్టమర్లను జోడించవచ్చు.',
+    customerStorageUnavailable:'కస్టమర్ నిల్వ అందుబాటులో లేదు. భద్రపరచే ముందు సమస్యను పరిష్కరించండి.',
+    customerStorageSaveError:'బ్రౌజర్ నిల్వలో కస్టమర్‌ను భద్రపరచలేకపోయాం. నిల్వను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+    invalidCustomer:'సరైన పేరు, ఫోన్ నంబర్, మొత్తం, తేదీ నమోదు చేయండి.',customerMissing:'ఈ కస్టమర్ ఇప్పుడు అందుబాటులో లేరు. కస్టమర్ల జాబితాకు వెళ్లి మళ్లీ ప్రయత్నించండి.',
+    languageLoadError:'భద్రపరిచిన భాషను లోడ్ చేయలేకపోయాం. ఇంగ్లీష్ ఉపయోగిస్తున్నాం.',
+    languageSaveError:'ఈ సెషన్‌కు భాష మారింది, కానీ మార్పును భద్రపరచలేకపోయాం.',
+    stockOut:'అయిపోయింది',stockLow:'తక్కువ',inStock:'స్టాక్‌లో ఉంది',
+    reportSalesTitle:'అమ్మకాల నివేదిక',reportPurchTitle:'కొనుగోలు నివేదిక',reportExpTitle:'ఖర్చుల నివేదిక',
+    reportSalesPlaceholder:'వివరమైన అమ్మకాల నివేదిక.',reportPurchPlaceholder:'వివరమైన కొనుగోలు నివేదిక.',reportExpPlaceholder:'వివరమైన ఖర్చుల నివేదిక.',
+    viewReport:'నివేదికను చూడండి',reportTitle:'వ్యాపార నివేదిక',reportSubtitle:'అమ్మకాలు, కొనుగోళ్లు, లాభం మరియు ఖర్చులు',backToBills:'బిల్లులకు తిరిగి వెళ్లండి',
+    monthlyComparison:'నెలవారీ అమ్మకాలు మరియు కొనుగోళ్లు',chartThousands:'నెలవారీ మొత్తం (₹ వేలల్లో)',monthlyChartDescription:'జనవరి నుండి జూన్ వరకు అమ్మకాలు, కొనుగోళ్ల పోలిక.',
+    profitTrend:'లాభ ధోరణి',profitThousands:'నెలవారీ లాభం (₹ వేలల్లో)',profitChartDescription:'జనవరి నుండి జూన్ వరకు నెలవారీ లాభ ధోరణి.',
+    expenseBreakdown:'ఖర్చుల వివరాలు',expenseByCategory:'వర్గాల వారీగా వాటా',
+    expenseChartDescription:'ఖర్చులు: అద్దె 35%, జీతం 28%, యుటిలిటీలు 15%, మార్కెటింగ్ 12%, ఇతరాలు 10%.',
+    rent:'అద్దె',salary:'జీతం',utilities:'యుటిలిటీలు',marketing:'మార్కెటింగ్',other:'ఇతరాలు'
+  },
+  ta:{
+    home:'முகப்பு',dashboard:'டாஷ்போர்டு',totalSales:'மொத்த விற்பனை',purchases:'கொள்முதல்',profit:'லாபம்',expenses:'செலவுகள்',
+    creditGiven:'கொடுத்த கடன்',creditTaken:'பெற்ற கடன்',creditTotals:'வாடிக்கையாளர் கடன் மொத்தம்',summary:'சுருக்கம்',
+    summaryHint:'விரிவான அறிக்கைகள் மற்றும் பரிவர்த்தனைகளுக்கு பில்களைத் திறக்கவும்.',profile:'சுயவிவரம்',language:'மொழி',saveChanges:'மாற்றங்களைச் சேமிக்கவும்',
+    name:'பெயர்',email:'மின்னஞ்சல்',phoneNumber:'தொலைபேசி எண்',storeName:'கடை பெயர்',address:'முகவரி',openProfile:'சுயவிவரத்தைத் திறக்கவும்',
+    bills:'பில்கள்',reportsSummary:'அறிக்கை சுருக்கம்',reportsLine:'மொத்த விற்பனை ₹4.82L · கொள்முதல் ₹3.11L · லாபம் ₹1.71L',sales:'விற்பனை',purchase:'கொள்முதல்',expense:'செலவு',
+    searchSalesBills:'விற்பனை பில்களைத் தேடுங்கள்...',searchPurchaseBills:'கொள்முதல் பில்களைத் தேடுங்கள்...',addBill:'+ பில் சேர்க்கவும்',
+    bill:'பில்',date:'தேதி',customer:'வாடிக்கையாளர்',vendor:'விற்பனையாளர்',amountShort:'தொகை',status:'நிலை',paid:'செலுத்தப்பட்டது',pending:'நிலுவை',
+    search:'தேடுங்கள்...',add:'+ சேர்க்கவும்',item:'பொருள்',stock:'இருப்பு',price:'விலை',
+    customers:'வாடிக்கையாளர்கள்',savedCustomerEntries:'சேமித்த வாடிக்கையாளர் கடன் பதிவுகள்',searchCustomers:'பெயர் அல்லது தொலைபேசி மூலம் தேடுங்கள்',
+    searchButton:'தேடுங்கள்',addCustomer:'வாடிக்கையாளரைச் சேர்க்கவும்',addCustomerTitle:'வாடிக்கையாளரைச் சேர்க்கவும்',editCustomerTitle:'வாடிக்கையாளர் விவரங்களைத் திருத்தவும்',
+    customerFormIntro:'தொடர்பு விவரங்களைச் சேர்த்து கடனைப் பதிவு செய்யவும்.',customerName:'வாடிக்கையாளர் பெயர்',creditType:'கடன் வகை',
+    amount:'தொகை',amountGiven:'தொகை (கொடுத்த கடன்)',amountTaken:'தொகை (பெற்ற கடன்)',dateTime:'தேதி மற்றும் நேரம்',attachBill:'பில்லை இணைக்கவும்',saveCustomer:'வாடிக்கையாளரைச் சேமிக்கவும்',updateCustomer:'வாடிக்கையாளரைப் புதுப்பிக்கவும்',
+    cancel:'ரத்துசெய்',noCustomers:'வாடிக்கையாளர்கள் இன்னும் சேர்க்கப்படவில்லை. கடனைக் கண்காணிக்க ஒருவரைச் சேர்க்கவும்.',
+    noCustomerMatches:'உங்கள் தேடலுக்கு வாடிக்கையாளர்கள் பொருந்தவில்லை.',customerStorageLoadError:'சேமித்த வாடிக்கையாளர்களை ஏற்ற முடியவில்லை, எனவே பட்டியல் மீட்டமைக்கப்பட்டது. நீங்கள் மீண்டும் வாடிக்கையாளர்களைச் சேர்க்கலாம்.',
+    customerStorageUnavailable:'வாடிக்கையாளர் சேமிப்பகம் கிடைக்கவில்லை. சேமிப்பதற்கு முன் சிக்கலைச் சரிசெய்யவும்.',
+    customerStorageSaveError:'உலாவி சேமிப்பகத்தில் வாடிக்கையாளரைச் சேமிக்க முடியவில்லை. இடத்தைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.',
+    invalidCustomer:'சரியான பெயர், தொலைபேசி எண், தொகை மற்றும் தேதியை உள்ளிடவும்.',customerMissing:'இந்த வாடிக்கையாளர் இப்போது இல்லை. வாடிக்கையாளர் பட்டியலுக்குச் சென்று மீண்டும் முயற்சிக்கவும்.',
+    languageLoadError:'சேமித்த மொழியை ஏற்ற முடியவில்லை. ஆங்கிலம் பயன்படுத்தப்படுகிறது.',
+    languageSaveError:'இந்த அமர்வுக்கு மொழி மாறியது, ஆனால் சேமிக்க முடியவில்லை.',
+    stockOut:'கையிருப்பில்லை',stockLow:'குறைவு',inStock:'கையிருப்பில் உள்ளது',
+    reportSalesTitle:'விற்பனை அறிக்கை',reportPurchTitle:'கொள்முதல் அறிக்கை',reportExpTitle:'செலவு அறிக்கை',
+    reportSalesPlaceholder:'விரிவான விற்பனை அறிக்கை.',reportPurchPlaceholder:'விரிவான கொள்முதல் அறிக்கை.',reportExpPlaceholder:'விரிவான செலவு அறிக்கை.',
+    viewReport:'அறிக்கையைப் பார்க்கவும்',reportTitle:'வணிக அறிக்கை',reportSubtitle:'விற்பனை, கொள்முதல், லாபம் மற்றும் செலவுகள்',backToBills:'பில்களுக்குத் திரும்பு',
+    monthlyComparison:'மாதாந்திர விற்பனை மற்றும் கொள்முதல்',chartThousands:'மாத மொத்தம் (₹ ஆயிரம்)',monthlyChartDescription:'ஜனவரி முதல் ஜூன் வரை விற்பனை மற்றும் கொள்முதல் ஒப்பீடு.',
+    profitTrend:'லாபப் போக்கு',profitThousands:'மாத லாபம் (₹ ஆயிரம்)',profitChartDescription:'ஜனவரி முதல் ஜூன் வரை மாதாந்திர லாபப் போக்கு.',
+    expenseBreakdown:'செலவு விவரம்',expenseByCategory:'வகை வாரியான பங்கு',
+    expenseChartDescription:'செலவுகள்: வாடகை 35%, சம்பளம் 28%, பயன்பாடுகள் 15%, சந்தைப்படுத்தல் 12%, மற்றவை 10%.',
+    rent:'வாடகை',salary:'சம்பளம்',utilities:'பயன்பாடுகள்',marketing:'சந்தைப்படுத்தல்',other:'மற்றவை'
+  }
+};
+const languageLocales={en:'en-IN',hi:'hi-IN',bn:'bn-IN',mr:'mr-IN',te:'te-IN',ta:'ta-IN'};
+let currentLanguage='en';
+let currentSection='dashboard';
+function t(key){
+  return translations[currentLanguage][key]||translations.en[key]||key;
+}
+function updateSectionTitle(){
+  const key=currentSection==='addCustomer'
+    ?editingCustomerId?'editCustomerTitle':'addCustomerTitle'
+    :({inventory:'stock',report:'reportTitle'}[currentSection]||currentSection);
+  title.textContent=t(key);
+  if(currentSection==='addCustomer'){
+    document.getElementById('customerFormTitle').textContent=t(key);
+    document.getElementById('saveCustomerButton').textContent=t(editingCustomerId?'updateCustomer':'saveCustomer');
+    document.getElementById('cancelCustomerEdit').textContent=t('cancel');
+  }
+}
+function applyLanguage(language){
+  currentLanguage=translations[language]?language:'en';
+  document.documentElement.lang=languageLocales[currentLanguage];
+  document.querySelectorAll('[data-i18n]').forEach(element=>{element.textContent=t(element.dataset.i18n);});
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(element=>{element.placeholder=t(element.dataset.i18nPlaceholder);});
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(element=>{element.setAttribute('aria-label',t(element.dataset.i18nAriaLabel));});
+  document.querySelectorAll('.bill-status').forEach(element=>{element.textContent=t(element.dataset.status);});
+  document.querySelectorAll('.language-option').forEach(option=>{
+    option.setAttribute('aria-pressed',String(option.dataset.language===currentLanguage));
+  });
+  document.getElementById('languageSelectedLabel').textContent=
+    document.querySelector(`.language-option[data-language="${currentLanguage}"]`).textContent;
+  currencyFormatter=new Intl.NumberFormat(languageLocales[currentLanguage],{style:'currency',currency:'INR',maximumFractionDigits:2});
+  const selectedCredit=document.querySelector('.credit-option[aria-pressed="true"]');
+  document.getElementById('customerAmountLabel').textContent=t(selectedCredit.dataset.type==='given'?'amountGiven':'amountTaken');
+  updateSectionTitle();
+  renderCustomers();
+  renderInv(inv);
+}
+function showSection(id){
+  currentSection=id;
+  sections.forEach(section=>section.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  updateSectionTitle();
+  document.getElementById('addCustomerButton').style.display=(id==='dashboard')?'grid':'none';
+  const activeView=id==='profile'||id==='addCustomer'?'dashboard':id==='report'?'bills':id;
+  views.forEach(view=>{
+    const isActive=view.dataset.view===activeView;
+    view.classList.toggle('active',isActive);
+    if(isActive) view.setAttribute('aria-current','page');
+    else view.removeAttribute('aria-current');
+  });
+}
+views.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();showSection(a.dataset.view);}));
+document.getElementById('viewReportButton').addEventListener('click',()=>showSection('report'));
+document.getElementById('backToBillsButton').addEventListener('click',()=>showSection('bills'));
+const customerStorageKey='voicekhata.customers';
+const customerList=document.getElementById('customerList');
+const customerNotice=document.getElementById('customerNotice');
+const customerForm=document.getElementById('customerForm');
+const customerFormNotice=document.getElementById('customerFormNotice');
+let currencyFormatter=new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2});
+let customers=[];
+let customerStorageReady=true;
+let editingCustomerId=null;
+function isCustomerRecord(customer){
+  return customer!==null
+    && typeof customer==='object'
+    && typeof customer.id==='string'
+    && typeof customer.name==='string'
+    && typeof customer.phone==='string'
+    && (customer.type==='given'||customer.type==='taken')
+    && typeof customer.amount==='number'
+    && Number.isFinite(customer.amount)
+    && customer.amount>0
+    && typeof customer.date==='string'
+    && !Number.isNaN(Date.parse(customer.date));
+}
+function setNotice(element,message,isError){
+  element.textContent=message;
+  element.hidden=!message;
+  element.classList.toggle('error',Boolean(isError));
+}
+function formatCustomerDate(value){
+  return new Date(value).toLocaleString(languageLocales[currentLanguage],{dateStyle:'medium',timeStyle:'short'});
+}
+function renderCustomers(){
+  customerList.replaceChildren();
+  const creditGiven=customers.filter(customer=>customer.type==='given').reduce((total,customer)=>total+customer.amount,0);
+  const creditTaken=customers.filter(customer=>customer.type==='taken').reduce((total,customer)=>total+customer.amount,0);
+  document.getElementById('totalCreditGiven').textContent=currencyFormatter.format(creditGiven);
+  document.getElementById('totalCreditTaken').textContent=currencyFormatter.format(creditTaken);
+  const searchTerm=document.getElementById('customerSearch').value.trim().toLocaleLowerCase(languageLocales[currentLanguage]);
+  const visibleCustomers=customers.filter(customer=>
+    `${customer.name} ${customer.phone}`.toLocaleLowerCase(languageLocales[currentLanguage]).includes(searchTerm),
+  );
+  if(visibleCustomers.length===0){
+    const emptyState=document.createElement('p');
+    emptyState.className='empty-state';
+    emptyState.textContent=customers.length===0?t('noCustomers'):t('noCustomerMatches');
+    customerList.append(emptyState);
+    return;
+  }
+  visibleCustomers.forEach(customer=>{
+    const row=document.createElement('button');
+    row.type='button';
+    row.className='customer-row';
+    row.dataset.customerId=customer.id;
+    row.setAttribute('aria-label',`${customer.name}, ${currencyFormatter.format(customer.amount)}, ${t(customer.type==='given'?'creditGiven':'creditTaken')}`);
+    const details=document.createElement('div');
+    const name=document.createElement('h3');
+    name.textContent=customer.name;
+    const phone=document.createElement('p');
+    phone.className='customer-contact';
+    phone.textContent=customer.phone;
+    const date=document.createElement('p');
+    date.className='customer-date';
+    date.textContent=formatCustomerDate(customer.date);
+    details.append(name,phone,date);
+    const balance=document.createElement('div');
+    balance.className='customer-balance';
+    const amount=document.createElement('div');
+    amount.className='customer-amount';
+    amount.textContent=currencyFormatter.format(customer.amount);
+    const kind=document.createElement('span');
+    kind.className=`customer-kind${customer.type==='taken'?' taken':''}`;
+    kind.textContent=t(customer.type==='given'?'creditGiven':'creditTaken');
+    balance.append(amount,kind);
+    row.append(details,balance);
+    customerList.append(row);
+  });
+}
+try{
+  const savedCustomers=localStorage.getItem(customerStorageKey);
+  if(savedCustomers!==null){
+    const parsedCustomers=JSON.parse(savedCustomers);
+    if(!Array.isArray(parsedCustomers)||!parsedCustomers.every(isCustomerRecord)){
+      throw new Error('Saved customer data has an invalid format.');
+    }
+    customers=parsedCustomers;
+  }
+}catch(error){
+  customers=[];
+  try{
+    localStorage.removeItem(customerStorageKey);
+    customerStorageReady=true;
+  }catch(clearError){
+    customerStorageReady=false;
+    console.error('Unable to clear corrupt customer storage:',clearError);
+  }
+  setNotice(customerNotice,t('customerStorageLoadError'),true);
+  console.error('Unable to load saved customers:',error);
+}
+renderCustomers();
+function getLocalDateTime(){
+  const now=new Date();
+  now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+  return now.toISOString().slice(0,16);
+}
+function setCreditType(type){
+  document.querySelectorAll('.credit-option').forEach(button=>{
+    button.setAttribute('aria-pressed',String(button.dataset.type===type));
+  });
+  document.getElementById('customerAmountLabel').textContent=t(type==='given'?'amountGiven':'amountTaken');
+}
+function resetCustomerForm(){
+  editingCustomerId=null;
+  customerForm.reset();
+  document.getElementById('customerDate').value=getLocalDateTime();
+  document.getElementById('cancelCustomerEdit').hidden=true;
+  setNotice(customerFormNotice,'',false);
+  setCreditType('given');
+  updateSectionTitle();
+}
+function beginNewCustomer(){
+  resetCustomerForm();
+  document.getElementById('cancelCustomerEdit').hidden=false;
+  showSection('addCustomer');
+}
+function startCustomerEdit(id){
+  const customer=customers.find(entry=>entry.id===id);
+  if(!customer){
+    setNotice(customerNotice,t('customerMissing'),true);
+    return;
+  }
+  editingCustomerId=customer.id;
+  document.getElementById('customerName').value=customer.name;
+  document.getElementById('customerPhone').value=customer.phone;
+  document.getElementById('customerAmount').value=String(customer.amount);
+  document.getElementById('customerDate').value=customer.date;
+  document.getElementById('cancelCustomerEdit').hidden=false;
+  setNotice(customerFormNotice,'',false);
+  setCreditType(customer.type);
+  updateSectionTitle();
+  showSection('addCustomer');
+}
+document.getElementById('addCustomerButton').addEventListener('click',beginNewCustomer);
+document.getElementById('customersAddButton').addEventListener('click',beginNewCustomer);
+const voiceButton=document.querySelector('.voice-button');
+voiceButton.addEventListener('click',()=>{
+  const listening=voiceButton.getAttribute('aria-pressed')==='true';
+  voiceButton.setAttribute('aria-pressed',String(!listening));
+  voiceButton.classList.toggle('listening',!listening);
+  if(listening){
+    voiceButton.textContent='🎤';
+  }else{
+    const loader=document.createElement('div');
+    loader.className='loader';
+    const inner=document.createElement('div');
+    inner.className='loader-inner';
+    for(let index=1;index<=24;index++){
+      const block=document.createElement('span');
+      block.className='loader-block';
+      block.style.animationDelay=`${index*0.2}s`;
+      inner.append(block);
+    }
+    loader.append(inner);
+    voiceButton.replaceChildren(loader);
+  }
+});
+document.getElementById('cancelCustomerEdit').addEventListener('click',()=>{
+  resetCustomerForm();
+  showSection('customers');
+});
+document.getElementById('customerSearch').addEventListener('input',renderCustomers);
+document.getElementById('customerSearchForm').addEventListener('submit',event=>{
+  event.preventDefault();
+  renderCustomers();
+});
+customerList.addEventListener('click',event=>{
+  const row=event.target.closest('.customer-row');
+  if(row) startCustomerEdit(row.dataset.customerId);
+});
+document.getElementById('customerDate').value=getLocalDateTime();
+customerForm.addEventListener('submit',event=>{
+  event.preventDefault();
+  if(!customerStorageReady){
+    setNotice(customerFormNotice,t('customerStorageUnavailable'),true);
+    return;
+  }
+  if(editingCustomerId&&!customers.some(entry=>entry.id===editingCustomerId)){
+    setNotice(customerFormNotice,t('customerMissing'),true);
+    return;
+  }
+  const selectedCredit=document.querySelector('.credit-option[aria-pressed="true"]');
+  const customer={
+    id:editingCustomerId||`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`,
+    name:document.getElementById('customerName').value.trim(),
+    phone:document.getElementById('customerPhone').value.trim(),
+    type:selectedCredit.dataset.type,
+    amount:Number(document.getElementById('customerAmount').value),
+    date:document.getElementById('customerDate').value,
+  };
+  if(!isCustomerRecord(customer)){
+    setNotice(customerFormNotice,t('invalidCustomer'),true);
+    return;
+  }
+  const updatedCustomers=editingCustomerId
+    ?customers.map(entry=>entry.id===editingCustomerId?customer:entry)
+    :[customer,...customers];
+  try{
+    localStorage.setItem(customerStorageKey,JSON.stringify(updatedCustomers));
+  }catch(error){
+    setNotice(customerFormNotice,t('customerStorageSaveError'),true);
+    console.error('Unable to save customer:',error);
+    return;
+  }
+  customers=updatedCustomers;
+  resetCustomerForm();
+  document.getElementById('customerSearch').value='';
+  setNotice(customerNotice,'',false);
+  renderCustomers();
+  showSection('customers');
+});
+document.querySelectorAll('.credit-option').forEach(button=>button.addEventListener('click',()=>setCreditType(button.dataset.type)));
+const tabSales=document.getElementById('tabSales'),tabPurch=document.getElementById('tabPurch');
+tabSales.addEventListener('click',()=>{tabSales.classList.remove('secondary');tabPurch.classList.add('secondary');tabSales.setAttribute('aria-selected','true');tabPurch.setAttribute('aria-selected','false');document.getElementById('salesCard').style.display='block';document.getElementById('purchCard').style.display='none';});
+tabPurch.addEventListener('click',()=>{tabPurch.classList.remove('secondary');tabSales.classList.add('secondary');tabPurch.setAttribute('aria-selected','true');tabSales.setAttribute('aria-selected','false');document.getElementById('salesCard').style.display='none';document.getElementById('purchCard').style.display='block';});
+const inv=[{name:'Rice 5kg',stock:42,price:320},{name:'Wheat Flour',stock:18,price:450},{name:'Sugar 1kg',stock:6,price:48},{name:'Cooking Oil',stock:0,price:180},{name:'Tea 250g',stock:35,price:120}];
+const it=document.getElementById('invTable');
+function renderInv(list){it.replaceChildren();const fragment=document.createDocumentFragment();list.forEach(i=>{const status=i.stock===0?'overdue':i.stock<10?'pending':'paid';const label=i.stock===0?t('stockOut'):i.stock<10?t('stockLow'):t('inStock');const tr=document.createElement('tr');const nameTd=document.createElement('td');nameTd.textContent=i.name;const stockTd=document.createElement('td');stockTd.textContent=String(i.stock);const priceTd=document.createElement('td');priceTd.textContent=`₹${i.price}`;const statusTd=document.createElement('td');const badge=document.createElement('span');badge.className=`badge ${status}`;badge.textContent=label;statusTd.append(badge);tr.append(nameTd,stockTd,priceTd,statusTd);fragment.append(tr);});it.append(fragment);}
+renderInv(inv);
+document.getElementById('invSearch').addEventListener('input',e=>{const q=e.target.value.toLowerCase();renderInv(inv.filter(i=>i.name.toLowerCase().includes(q)));});
+const languageDropdown=document.getElementById('languageDropdown');
+const languageNotice=document.getElementById('languageNotice');
+let savedLanguage='en';
+let languageLoadFailed=false;
+try{
+  const storedLanguage=localStorage.getItem('voiceKhata.language');
+  if(translations[storedLanguage]) savedLanguage=storedLanguage;
+}catch(error){
+  languageLoadFailed=true;
+  console.error('Unable to load language preference:',error);
+}
+applyLanguage(savedLanguage);
+if(languageLoadFailed) setNotice(languageNotice,t('languageLoadError'),true);
+document.querySelectorAll('.language-option').forEach(option=>option.addEventListener('click',()=>{
+  applyLanguage(option.dataset.language);
+  languageDropdown.open=false;
+  try{
+    localStorage.setItem('voiceKhata.language',currentLanguage);
+    setNotice(languageNotice,'',false);
+  }catch(error){
+    setNotice(languageNotice,t('languageSaveError'),true);
+    console.error('Unable to save language preference:',error);
+  }
+}));
+const billsFull=[{no:'VK-1042',date:'21 Nov',cust:'Anita Sharma',amt:'₹2,340',status:'paid'},{no:'VK-1041',date:'20 Nov',cust:'Rajesh Patil',amt:'₹1,120',status:'pending'}];
+const purchFull=[{no:'VK-P218',date:'19 Nov',vendor:'Sharma Traders',amt:'₹8,450',status:'paid'},{no:'VK-P217',date:'17 Nov',vendor:'City Wholesale',amt:'₹3,280',status:'pending'}];
+const bt=document.getElementById('billsTable');
+const pt=document.getElementById('purchTable');
+function renderBillRows(table,list,partyKey){
+  table.replaceChildren();
+  const fragment=document.createDocumentFragment();
+  list.forEach(b=>{
+    const tr=document.createElement('tr');
+    const noTd=document.createElement('td');noTd.textContent=b.no;
+    const dateTd=document.createElement('td');dateTd.textContent=b.date;
+    const partyTd=document.createElement('td');partyTd.textContent=b[partyKey];
+    const amtTd=document.createElement('td');amtTd.textContent=b.amt;
+    const statusTd=document.createElement('td');
+    const badge=document.createElement('span');badge.className=`badge ${b.status} bill-status`;badge.dataset.status=b.status;badge.textContent=t(b.status);
+    statusTd.append(badge);
+    tr.append(noTd,dateTd,partyTd,amtTd,statusTd);
+    fragment.append(tr);
+  });
+  table.append(fragment);
+}
+function filterBills(list,query,partyKey){
+  const q=query.trim().toLowerCase();
+  if(!q) return list;
+  return list.filter(b=>`${b.no} ${b.date} ${b[partyKey]} ${b.amt} ${b.status}`.toLowerCase().includes(q));
+}
+function renderSalesBills(){
+  renderBillRows(bt,filterBills(billsFull,document.getElementById('salesSearch').value,'cust'),'cust');
+}
+function renderPurchBills(){
+  renderBillRows(pt,filterBills(purchFull,document.getElementById('purchSearch').value,'vendor'),'vendor');
+}
+renderSalesBills();
+renderPurchBills();
+document.getElementById('salesSearch').addEventListener('input',renderSalesBills);
+document.getElementById('purchSearch').addEventListener('input',renderPurchBills);
+document.getElementById('addSalesBillButton').addEventListener('click',()=>document.getElementById('salesFile').click());
+document.getElementById('addPurchBillButton').addEventListener('click',()=>document.getElementById('purchFile').click());
+</script>
+</body>
+</html>
